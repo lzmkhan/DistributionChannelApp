@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +21,8 @@ public class Splash_Screen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splashscreen);
-		
+		ActionBar ab = getActionBar();
+		ab.hide();
 		new Handler().postDelayed(new Runnable() {
 
 			/*

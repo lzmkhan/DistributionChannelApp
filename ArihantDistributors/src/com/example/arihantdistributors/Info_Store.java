@@ -7,17 +7,17 @@ public class Info_Store {
 
 			
 			
-		public String AccountID = "";
-		public String Name = "";
-		public String Street_1 = "";	
-		public String Street_2 = "";
-		public String Area = "";	
-		public String City = "";	
-		public String District = "";
-		public String State = "";
-		public String Pincode = "";
-		public String Mobile = "";
-		public String Email = "";
+		public String AccountID = "123456";
+		public String Name = "kumaru";
+		public String Street_1 = "26/121";	
+		public String Street_2 = "Dharmapurtam rd";
+		public String Area = "palaca street";	
+		public String City = "Mayuram";	
+		public String District = "Nagai";
+		public String State = "Tamil Nadu";
+		public String Pincode = "609001";
+		public String Mobile = "8438317271";
+		public String Email = "lzmkhan@yahoo.com";
 		
 			private static Info_Store dataHolder = new Info_Store();
 			

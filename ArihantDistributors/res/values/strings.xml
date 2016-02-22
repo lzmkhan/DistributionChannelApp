@@ -43,4 +43,11 @@
 <string name="itemTitle">Item Title 1</string>
 <string name="itemPrice">INR 50</string>
 <string name="cartcontent">click to add to cart</string>
+<string name="addtocart">Add to cart</string>
+<string name="checkout">Checkout</string>
+<string name="checkoutOTP">We have sent you an One Time Password. \nPlease Enter it below to complete your order.</string>
+<string name="checkoutBtn1">Confirm</string>
+<string name="checkoutBtn2">Resend OTP</string>
+<string name="checkoutText">Your Order has been successfully placed.\nYour order number is </string>
+<string name ="submit">Submit</string>
 </resources>

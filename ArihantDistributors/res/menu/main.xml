@@ -8,38 +8,34 @@
       <item
         android:id="@+id/home"
         android:title="@string/Home"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_home"
         android:showAsAction="ifRoom|withText"
         />
 
            <item
         android:id="@+id/chat"
         android:title="@string/Chat"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_chat"
         android:showAsAction="ifRoom|withText" />
            
                   <item
         android:id="@+id/action_settings"
        android:title="@string/action_settings"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_settings"
         android:showAsAction="ifRoom|withText" />
                   
-              <item
-        android:id="@+id/feedback"
-        android:title="@string/Feedback"
-        android:icon="@drawable/ic_launcher"
-        android:showAsAction="ifRoom|withText" />
+          
               
                      <item
         android:id="@+id/phone"
         android:title="@string/phone"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_phone"
         android:showAsAction="ifRoom|withText" />
           
                        <item
         android:id="@+id/Cart"
         android:title="@string/Cart"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_shopping_cart"
         android:showAsAction="always" />
 
 </menu>

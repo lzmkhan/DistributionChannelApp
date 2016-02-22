@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:animateLayoutChanges="true"
-    >
+    android:background="#F0F0F0"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/brandCatTitle"
@@ -35,7 +36,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
-        android:text="@string/Reset" />
+        android:text="@string/Reset"
+                 android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+ 
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/btnResend"
@@ -43,6 +51,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
-        android:text="@string/Resend" />
+        android:text="@string/Resend"
+                 android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+ 
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

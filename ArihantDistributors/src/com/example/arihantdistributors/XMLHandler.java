@@ -13,7 +13,7 @@ import android.content.Context;
 
 public class XMLHandler {
 
-	public Context c;
+	
 	
 	
 	public List<String> parseXML(String Source) throws XmlPullParserException, IOException

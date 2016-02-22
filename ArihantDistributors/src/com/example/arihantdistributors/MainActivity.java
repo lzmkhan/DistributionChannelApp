@@ -3,16 +3,24 @@ package com.example.arihantdistributors;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.provider.ContactsContract;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,19 +38,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	 String selectedBrand ="";
+	 String selectedCategory ="";
+	 static List<Item> myItem = new ArrayList<Item>();
+	 List<BrandCategory> myBrand = new ArrayList<BrandCategory>();
+	  List<BrandCategory> myCategory = new ArrayList<BrandCategory>();
+	static ArrayAdapter<BrandCategory> brandAdapter;
+	static ArrayAdapter<BrandCategory> categoryAdapter;
+	static ArrayAdapter<Item> itemAdapter;
 	
-	private List<Item> myItem = new ArrayList<Item>();
-	private static List<BrandCategory> myBrand = new ArrayList<BrandCategory>();
-	private static List<BrandCategory> myCategory = new ArrayList<BrandCategory>();
-	static ArrayAdapter<BrandCategory> adapter;
-	static ArrayAdapter<Item> adapter1;
+	Context con = this;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	
-		populateCategoryList("asdfs");
+		ActionBar ab = getActionBar();
+		ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF9800")));
+		ab.setSplitBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF9800")));
 		 Log.d("point1","");
+		 
+	
+		 
 		 FragmentManager fragmentManager = getFragmentManager();
 	      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 	      Forgetfragment fragment = new Forgetfragment();
@@ -58,66 +76,98 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public void populateItemList() {
+	public void getItemList(String brand, String Category)
+	{
+		WebserviceHandler wb = new WebserviceHandler(2); //setup searchquery
+		if(isOnline())
+		{
+		wb.query ="Select * from products where Brand = " +brand + " AND Category = " + Category ;
+		wb.submode =2;
+		wb.set_context(this);
+		wb.execute();
+		}
+		else
+		{
+			Toast.makeText(this, "No Internet connection!", Toast.LENGTH_SHORT).show();
+		}
+	}
+	public void populateItemList(List<Item> input) {
 		myItem.clear();
-		Item i = new Item(0 , "flask", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		 i = new Item(1 , "flask0", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		 i = new Item(2 , "flask1", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		 i = new Item(3 , "flask2", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		 i = new Item(4 , "flask3", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		 i = new Item(5 , "flask4", 200, "xyz", "flask, hulk likes flask");
-		myItem.add(i);
-		// call the web servicet to fetch brand images and brand names into myBrand arraylist
+		myItem.addAll(input);
+	
 		
 		
 		
 	}
-    public void populateCategoryList(String brand) {
-		myBrand.clear();
-		BrandCategory b = new BrandCategory(0, "xyz", "Caategory0");
-		myBrand.add(b);
-		
-		b = new BrandCategory(1, "xyz", "category1");
-		myBrand.add(b);
-		b = new BrandCategory(2, "xyz", "category2");
-		myBrand.add(b);
-		b = new BrandCategory(2, "xyz", "category3");
-		myBrand.add(b);
-		b = new BrandCategory(3, "xyz", "category4");
-		myBrand.add(b);
-		b = new BrandCategory(4, "xyz", "category5");
-		myBrand.add(b);
-		// call the web service to fetch category images and category names in to myCategory arraylist
-		
+	
+	public void getCategoryList(String brand)
+	{
+		WebserviceHandler wb = new WebserviceHandler(2); //setup searchquery
+		if(isOnline())
+		{
+		wb.query ="Select * from category where BrandID = " +brand;
+		wb.submode =1;
+		wb.set_context(this);
+		wb.execute();
+		}
+		else
+		{
+			Toast.makeText(this, "No Internet connection!", Toast.LENGTH_SHORT).show();
+		}
+	}
+    public void populateCategoryList(List<BrandCategory> input) {
+    	myCategory.clear();
+		myCategory.addAll(input);	
 		
 	}
 
-    private void populateCategoryList(String brand, String Category) {
+    public boolean isOnline() {
+		  ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		  NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		  return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+    
+    
+    public void getBrandList() {
 		
-		
-  		// call the web service to fetch item images and item names.
-  		
-  		
+	WebserviceHandler wb = new WebserviceHandler(2); //setup searchquery
+	if(isOnline())
+	{
+	wb.query ="Select * from brands";
+	wb.submode =0;
+	wb.set_context(this);
+	wb.execute();
+    }
+	else
+	{
+		Toast.makeText(this, "No Internet connection!", Toast.LENGTH_SHORT).show();
+	}
   	}
 	
-	 public  void populateBrandCategoryListView() {
-		//	ArrayAdapter<BrandCategory> adapter = new BrandListAdapter1(myBrand);
-	 adapter = new BrandListAdapter1(myBrand);
-			//ListView list = (ListView)findViewById(R.id.listviewb);
-		//	list.setAdapter(adapter);
-			Log.d("Checkpoint2", "Executed populate listview()");
+    
+    public void populateBrandList(List<BrandCategory> input){
+    	myBrand.clear();
+    	myBrand.addAll(input);		
+    }
+	 public  void populateBrandListView() {
+
+	 brandAdapter = new BrandListAdapter1(myBrand);
+	 
+			Log.d("Checkpoint2", "Executed populatebrand listview()");
 		}
+	 public  void populateCategoryListView() {
+	
+		 categoryAdapter = new BrandListAdapter1(myCategory);
+		 categoryAdapter.notifyDataSetChanged();
+		
+				Log.d("Checkpoint2", "Executed populatecategrory listview()");
+			}
 	    
 	    public void populateItemListView() {
-	  		 adapter1 = new ItemListAdapter1(myItem);
+	  		 itemAdapter = new ItemListAdapter1(myItem);
 	  		//ListView list = (ListView) findViewById(R.id.listviewI);
 	  		//list.setAdapter(adapter1);
-	  		Log.d("Checkpoint2", "Executed populate listview()");
+	  		Log.d("Checkpoint2", "Executed populateitem listview()");
 	  	}
     
 	@Override
@@ -130,37 +180,61 @@ public class MainActivity extends Activity {
 			 
          case R.id.home:
              Toast.makeText(getBaseContext(), "You selected hone", Toast.LENGTH_SHORT).show();
+             Intent i = new Intent(this, MainActivity.class);             
+             startActivity(i);
              break;
 
          case R.id.chat:
              Toast.makeText(getBaseContext(), "You selected chat", Toast.LENGTH_SHORT).show();
+             openWhatsApp("919742132060@s.whatsapp.net");
              break;
 
          case R.id.action_settings:
-             Toast.makeText(getBaseContext(), "You selected settings", Toast.LENGTH_SHORT).show();
+           //  Toast.makeText(getBaseContext(), "You selected settings", Toast.LENGTH_SHORT).show();
+             Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
+				myIntent.putExtra("mode", 0 );
+		    	MainActivity.this.startActivity(myIntent);
              break;
 
-         case R.id.feedback:
-             Toast.makeText(getBaseContext(), "You selected feedback", Toast.LENGTH_SHORT).show();
-             break;
+       
 
          case R.id.phone:
              Toast.makeText(getBaseContext(), "You selected phone", Toast.LENGTH_SHORT).show();
+             Uri call = Uri.parse("tel:"+"918438317271");             
+		       Intent surf = new Intent(Intent.ACTION_DIAL, call); 
+		       startActivity(surf);
              break;
 
          case R.id.Cart:
-             Toast.makeText(getBaseContext(), "You selected EMail", Toast.LENGTH_SHORT).show();
+             Toast.makeText(getBaseContext(), "You selected Cart", Toast.LENGTH_SHORT).show();
+             Intent j = new Intent(MainActivity.this,Cart.class);             
+             startActivity(j);
              break;
          }
      return true;
 	
 	}
 	
+
+	 private void openWhatsApp(String id) {
+
+	 Cursor c = getContentResolver().query(ContactsContract.Data.CONTENT_URI,
+	         new String[] { ContactsContract.Contacts.Data._ID }, ContactsContract.Data.DATA1 + "=?",
+	         new String[] { id }, null);
+	 c.moveToFirst();
+	 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("content://com.android.contacts/data/" + c.getString(0)));
+
+	 startActivity(i);
+	 c.close();
+	 }
 	public class BrandListAdapter1 extends ArrayAdapter<BrandCategory> {
-		public BrandListAdapter1(List<BrandCategory> myBrand) {
+		
+		List<BrandCategory> contents = null;
+		
+		public BrandListAdapter1(List<BrandCategory> contents) {
 			
-			super(MainActivity.this, R.layout.list_row, myBrand);
-			
+			super(MainActivity.this, R.layout.list_row, contents);
+			this.contents = contents;
 			}
 
 		@Override
@@ -172,7 +246,7 @@ public class MainActivity extends Activity {
 			}
 			
 			// Find the Item to work with.
-			BrandCategory currentBrand = myBrand.get(position);
+			BrandCategory currentBrand = contents.get(position);
 			
 			// Fill the view
 			ImageView imageView = (ImageView)itemView.findViewById(R.id.brandCatImage);
@@ -180,8 +254,13 @@ public class MainActivity extends Activity {
 			
 			// title
 			TextView titleText = (TextView) itemView.findViewById(R.id.brandCatTitle);
-			titleText.setText(currentBrand.getBrandCatName());
-
+			int length = currentBrand.getBrandCatName().length();
+			if(length > 7)
+			titleText.setText(currentBrand.getBrandCatName().substring(0, 5) +"...");
+			else
+				titleText.setText(currentBrand.getBrandCatName());	
+		
+			Log.d("categoryname",currentBrand.getBrandCatName());
 			
 			
 
@@ -207,7 +286,7 @@ public class MainActivity extends Activity {
 			}
 			
 			// Find the Item to work with.
-			Item currentItem = myItem.get(position);
+			final Item currentItem = myItem.get(position);
 			
 			// Fill the view
 			ImageView imageView = (ImageView)itemView.findViewById(R.id.itemImage);
@@ -215,18 +294,65 @@ public class MainActivity extends Activity {
 			
 			// title
 			TextView titleText = (TextView) itemView.findViewById(R.id.itemTitle);
-			titleText.setText(currentItem.getItemName());
+			int length = currentItem.getItemName().length();
+			if(length > 15)
+			titleText.setText(currentItem.getItemName().substring(0, 15) +"...");
+			else
+				titleText.setText(currentItem.getItemName());	
 			
+		
 			//price
 			TextView PriceText = (TextView) itemView.findViewById(R.id.itemPriceT);
-			titleText.setText(currentItem.getItemPrice()+"");
+			PriceText.setText("INR"+currentItem.getItemPrice()+"");
 			
             ImageView imageView2 = (ImageView)itemView.findViewById(R.id.addToCart);
             imageView2.setOnClickListener(new OnClickListener(){
             	   @Override
        		    public void onClick(View v) {
             		   // opens up item description window.
-            		   
+            		   TempData.getInstance().selectedItem = currentItem;
+            		   final customDialog dialog = new customDialog(con);
+   					dialog.setContentView(R.layout.editqntydiag);
+   					dialog.setTitle(Html.fromHtml("<font color='##FF9800'>Quantity</font>"));
+
+   					// set the custom dialog components - text, image and button
+   					
+   					EditText editText = (EditText) dialog.findViewById(R.id.qntyText);
+					editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.primary_light), PorterDuff.Mode.SRC_ATOP);
+   					Button dialogButton = (Button) dialog.findViewById(R.id.button1);
+   					// if button is clicked, close the custom dialog
+   					dialogButton.setOnClickListener(new OnClickListener() {
+   						@Override
+   						public void onClick(View v) {
+   							EditText ed1 = (EditText) dialog.findViewById(R.id.qntyText);
+   							String qnty = ed1.getText().toString();
+   							if(!qnty.equals(""))
+   							{
+   							 int index = TempData.getInstance().cart.chkifalrdyextsinlst(TempData.getInstance().selectedItem);
+   							 TempData.getInstance().selectedItem.setItemQnty(Integer.parseInt(qnty));
+   							 if( index == -1)
+   							 {
+   								TempData.getInstance().cart.addToCart(TempData.getInstance().selectedItem); 
+   								Toast.makeText(con, "Added item to cart!", Toast.LENGTH_SHORT).show();
+   							 }
+   							 else
+   							 {
+   								 TempData.getInstance().cart.updateCartItem(index, TempData.getInstance().selectedItem.getItemQnty());
+   								 Toast.makeText(con, "Updated item in cart!", Toast.LENGTH_SHORT).show();
+   							 }
+   							}
+   							else
+   							{
+   								Toast.makeText(con, "Quantity cannot be empty, item not added!", Toast.LENGTH_SHORT).show();
+   							}
+   							
+   							
+   							
+   							dialog.dismiss();
+   						}
+   					});
+
+   					dialog.show();
             	   }
             });
 
@@ -237,9 +363,9 @@ public class MainActivity extends Activity {
 	
 	private static class Forgetfragment extends Fragment
 	{
-		 EditText field1 ;
+		
 		public int fragNum = 1;
-		TextView txt1;
+		
 		 View rootView;
 		 @Override
 		   public View onCreateView(LayoutInflater inflater,
@@ -262,21 +388,25 @@ public class MainActivity extends Activity {
 			 */
 			 //listview for brand
 			 
-		
+			 ((MainActivity)getActivity()).getBrandList();
 			
-			
+			 ActionBar ab = getActivity().getActionBar();
+			 ab.setTitle("Brands");
 			 
 			 ListView list = (ListView) rootView.findViewById(R.id.listviewb);
-			 ((MainActivity)getActivity()).populateBrandCategoryListView();
-				list.setAdapter(adapter);
-			    Log.d("point2","frag1");
+			 ((MainActivity)getActivity()).populateBrandListView();
+			
+				list.setAdapter(brandAdapter);
+				list.deferNotifyDataSetChanged();
+				
 				list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View viewClicked,
 							int position, long id) {
 						
 						
-					
+						TempData.getInstance().selectedBrand = ((MainActivity)getActivity()).myBrand.get(position).getBrandID()+"";
+						 ((MainActivity)getActivity()).getCategoryList(TempData.getInstance().selectedBrand);
 					//call category fragment
 						 FragmentManager fragmentManager = getFragmentManager();
 					      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -295,20 +425,26 @@ public class MainActivity extends Activity {
 			 {
 				 rootView = inflater.inflate(R.layout.categoryfragment, container,
 							false);
-				 
+				 ActionBar ab = getActivity().getActionBar();
+				 ab.setTitle("Categories");
+				
 				//listview for category
 				 ListView list = (ListView) rootView.findViewById(R.id.listviewC);
-				 ((MainActivity)getActivity()).populateCategoryList("sparta");
-				 ((MainActivity)getActivity()).populateBrandCategoryListView();
-					list.setAdapter(adapter);
+				 
+				 ((MainActivity)getActivity()).populateCategoryListView();
+				 categoryAdapter.notifyDataSetChanged();
+					list.setAdapter(categoryAdapter);
+					
 					list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						@Override
 						public void onItemClick(AdapterView<?> parent, View viewClicked,
 								int position, long id) {
 							
 							
-						
+							TempData.getInstance().selectedCategory = ((MainActivity)getActivity()).myCategory.get(position).getBrandID()+"";
 						//call item fragment
+							((MainActivity)getActivity()).getItemList(TempData.getInstance().selectedBrand,TempData.getInstance().selectedCategory);
+							
 							 FragmentManager fragmentManager = getFragmentManager();
 						      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 						      Forgetfragment fragment = new Forgetfragment();
@@ -329,13 +465,89 @@ public class MainActivity extends Activity {
 				 rootView = inflater.inflate(R.layout.itemfragment, container,
 							false);
 				 
+				 ActionBar ab = getActivity().getActionBar();
+				 ab.setTitle("Products");
+				 
 				 //listview for item
 				 ListView list = (ListView) rootView.findViewById(R.id.listviewI);
-				 ((MainActivity)getActivity()).populateItemList();
+			
 				 ((MainActivity)getActivity()).populateItemListView();
-					list.setAdapter(adapter1);
+					list.setAdapter(itemAdapter);
+					list.deferNotifyDataSetChanged();
+					list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+						@Override
+						public void onItemClick(AdapterView<?> parent, View viewClicked,
+								int position, long id) {
+							
+							TempData.getInstance().selectedItem = myItem.get(position);
+						
+							
+							 FragmentManager fragmentManager = getFragmentManager();
+						      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+						      Forgetfragment fragment = new Forgetfragment();
+						      fragment.fragNum=4;
+						      fragmentTransaction.setCustomAnimations(R.animator.enter_from_right, R.animator.exit_to_left,R.animator.enter_from_left,R.animator.exit_to_right);
+						      fragmentTransaction.replace(R.id.content_frame1, fragment);		
+						        
+							    fragmentTransaction.addToBackStack(null);
+						         fragmentTransaction.commit();
+					        
+							}
+					});
 			 }
-			 
+			 else if( fragNum ==4)
+			 {
+				 rootView = inflater.inflate(R.layout.itemcontents, container,
+							false);
+				 
+				 ActionBar ab = getActivity().getActionBar();
+				 ab.setTitle(TempData.getInstance().selectedItem.getItemName());
+				 
+				
+				 
+				 TextView tv2 = (TextView)rootView.findViewById(R.id.citemDesc);
+				 tv2.setText("Description:\n" + TempData.getInstance().selectedItem.getItemDesc() +"\n Capacity: " + TempData.getInstance().selectedItem.getCapacity() +"\n Usage: " + TempData.getInstance().selectedItem.getUsage());
+				 
+				 TextView tv3 = (TextView)rootView.findViewById(R.id.citemPrice);
+				 tv3.setText("INR " + TempData.getInstance().selectedItem.getItemPrice());
+				
+				
+			     Button b1 = (Button)rootView.findViewById(R.id.btnAddtoCart);
+			     b1.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						 EditText edt1 = (EditText)rootView.findViewById(R.id.edtgetQnty);
+						 String Qnty = edt1.getText().toString();
+						 if(Qnty.equals(null)||Qnty.equals("")||Qnty.equals(" ")||Qnty.trim().equals("0"))
+						 {
+							 Toast.makeText(getActivity(), "Please enter a valid Quantity", Toast.LENGTH_SHORT).show();
+						 }
+						 else
+						 {
+						 TempData.getInstance().selectedItem.setItemQnty(Integer.parseInt(Qnty));
+						 //addtocart functions should come.
+						 int index = TempData.getInstance().cart.chkifalrdyextsinlst(TempData.getInstance().selectedItem);
+						 if( index == -1)
+						 {
+							TempData.getInstance().cart.addToCart(TempData.getInstance().selectedItem); 
+							Toast.makeText(getActivity(), "Added item to cart!", Toast.LENGTH_SHORT).show();
+						 }
+						 else
+						 {
+							 TempData.getInstance().cart.updateCartItem(index, TempData.getInstance().selectedItem.getItemQnty());
+							 Toast.makeText(getActivity(), "Updated item in cart!", Toast.LENGTH_SHORT).show();
+						 }
+						 FragmentManager fragmentManager = getFragmentManager();
+					      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+					      fragmentManager.popBackStack();
+					      fragmentTransaction.commit();
+						 }
+					}
+			    	 
+			     });
+			 }
 			 
 			 
 			 

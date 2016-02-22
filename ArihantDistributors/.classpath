@@ -5,7 +5,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="D:/android/ksoap2-android-assembly-3.4.0-jar-with-dependencies(1).jar"/>
 	<classpathentry kind="lib" path="D:/adt-bundle-windows-x86_64-20140321/sdk/platforms/android-22/android.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/adt-bundle-windows-x86_64-20140321/sdk/docs/reference"/>
@@ -15,5 +14,6 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Users/marcus/workspace/ArihantDistributors/libs/picasso-2.5.2.jar"/>
+	<classpathentry kind="lib" path="libs/ksoap2-android-assembly-3.4.0-jar-with-dependencies(1).jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

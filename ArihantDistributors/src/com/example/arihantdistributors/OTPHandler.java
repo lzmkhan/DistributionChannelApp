@@ -1,5 +1,17 @@
 package com.example.arihantdistributors;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.*;
+
+
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 public class OTPHandler {
 
@@ -19,8 +31,9 @@ public class OTPHandler {
 	public boolean sendOTP()
 	{
 		boolean status = false;
-		//WebServiceHandler wsHandler = new WebServiceHandler();
-	
+		
+		MyPost mp = new MyPost();
+		mp.execute();
 		
 		//status = sendOTPtoSMS(Info_Store.getInstance().AccountID, OTPHolder);
 		return status;
@@ -32,6 +45,72 @@ public class OTPHandler {
 			return true;
 		else
 			return false;
+	}
+	
+	
+	private class MyPost extends AsyncTask<Void, Void, Void> 
+	{
+	    @SuppressWarnings("deprecation")
+		@Override
+	    protected Void doInBackground(Void... arg0) 
+	    {
+	      
+	     //Your authentication key
+	       String authkey = "60849A2WDelwizI55d2fb63";
+	       //Multiple mobiles numbers separated by comma
+	       String mobiles = "91" + Info_Store.getInstance().Mobile;
+	       //Sender ID,While using route4 sender id should be 6 characters long.
+	       String senderId = "MARCUS";
+	       //Your message to send, Add URL encoding here.
+	       String message = "Your OTP is " + OTPHolder;
+	       //define route
+	       String route="default";
+
+	       URLConnection myURLConnection=null;
+	       URL myURL=null;
+	       BufferedReader reader=null;
+
+	       //encoding message 
+	       String encoded_message=URLEncoder.encode(message);
+
+	       //Send SMS API
+	       String mainUrl="https://control.msg91.com/api/sendhttp.php?";
+
+	       //Prepare parameter string 
+	       StringBuilder sbPostData= new StringBuilder(mainUrl);
+	       sbPostData.append("authkey="+authkey); 
+	       sbPostData.append("&mobiles="+mobiles);
+	       sbPostData.append("&message="+encoded_message);
+	       sbPostData.append("&route="+route);
+	       sbPostData.append("&sender="+senderId);
+
+	       //final string
+	       mainUrl = sbPostData.toString();
+	       try
+	       {
+	           //prepare connection
+	           myURL = new URL(mainUrl);
+	           myURLConnection = myURL.openConnection();
+	           myURLConnection.connect();
+	           reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+	           
+	           //reading response 
+	           String response;
+	           while ((response = reader.readLine()) != null) 
+	           //print response 
+	           Log.d("RESPONSE", ""+response);
+	           
+	           
+	           //finally close connection
+	           reader.close();
+	       } 
+	       catch (IOException e) 
+	       { 
+	       	e.printStackTrace();
+	       }
+		return null; 
+
+	    }
 	}
 	
 }

@@ -1,17 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#F0F0F0"
+    android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/edtgetQnty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:ems="10" >
 
-        <requestFocus />
     </EditText>
 
     <LinearLayout
@@ -20,12 +21,19 @@
         android:layout_gravity="center_horizontal" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btnAddtoCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:layout_margin="10dp"
-            android:text="@string/sort" />
+            android:text="@string/sort" 
+                    android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+    
+        android:textColor="#FFFFFF"/>
 
         <Button
             android:id="@+id/button2"
@@ -33,7 +41,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_margin="10dp"
-            android:text="@string/filter" />
+            android:text="@string/filter"
+                    android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+      
+        android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/button3"
@@ -41,7 +56,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:layout_margin="10dp"
-            android:text="@string/clear" />
+            android:text="@string/clear"
+                    android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+ 
+        android:textColor="#FFFFFF" />
 
     </LinearLayout>
     

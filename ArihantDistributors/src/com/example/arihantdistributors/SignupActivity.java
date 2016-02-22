@@ -2,6 +2,7 @@ package com.example.arihantdistributors;
 
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -33,7 +34,8 @@ public class SignupActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signup);
 		
-	
+		ActionBar ab = getActionBar();
+		ab.hide();
 		
 	      fragment = new SignUpFragment();
 		
@@ -155,6 +157,14 @@ public class SignupActivity extends Activity {
 										   Toast.LENGTH_LONG).show();
 							}
 							//need to validate whether fields are empty are not
+							
+							/*
+							 * INSERT INTO `arihant`.`acc_user_info` (`ID`, `Name`, `Street_1`, `Street_2`, `Area`, `City`, `District`, `State`, `Pincode`, `MobileNo`, `Email`, `Account_ID`) VALUES (NULL, 'sdfsdf', 'sdfsdf', 'sdfsdf', 'sdfsdfsdf', 'dfsdf', 'sdfsdfs', '', '234233', 'sdfsdfsdf', 'sdfdfsdf', 'sdfsdfsdf');
+							 * Need to insert records on both acc_user_info table and accounts table
+							 * 
+							 */
+							
+							
 						}
 					});
 			     break;
@@ -178,12 +188,22 @@ public class SignupActivity extends Activity {
 										   Toast.LENGTH_LONG).show();
 							}
 							//need to validate whether fields are empty are not.
+							/*
+							 * INSERT INTO `arihant`.`acc_user_info` (`ID`, `Name`, `Street_1`, `Street_2`, `Area`, `City`, `District`, `State`, `Pincode`, `MobileNo`, `Email`, `Account_ID`) VALUES (NULL, 'sdfsdf', 'sdfsdf', 'sdfsdf', 'sdfsdfsdf', 'dfsdf', 'sdfsdfs', '', '234233', 'sdfsdfsdf', 'sdfdfsdf', 'sdfsdfsdf');
+							 * Need to insert records on both acc_user_info table and accounts table
+							 * 
+							 */
 							
 						}
 					});
 					
 				 break;
 			 
+				 
+			 case 3:
+				 //This fragment holds the otp code to verify the phone number
+				 //send otp and once otp matches send verified as status for verified column
+				 break;
 			 }
 			 
 					 
@@ -206,7 +226,7 @@ public class SignupActivity extends Activity {
 			 if(fragNum == 2){
 				 //fetches contents from customer fragment
 				 formContent = new String[4];
-				 EditText editText1 = (EditText)rootView.findViewById(R.id.editText1);
+				 EditText editText1 = (EditText)rootView.findViewById(R.id.edtgetQnty);
 				 EditText editText2 = (EditText)rootView.findViewById(R.id.editText2);
 				 EditText editText3 = (EditText)rootView.findViewById(R.id.editText3);
 				 EditText editText4 = (EditText)rootView.findViewById(R.id.editText4);
@@ -220,7 +240,7 @@ public class SignupActivity extends Activity {
 			 {
 				 //fetches contents from distributer fragment
 				 formContent = new String[7];
-				 EditText editText1 = (EditText)rootView.findViewById(R.id.editText1);
+				 EditText editText1 = (EditText)rootView.findViewById(R.id.edtgetQnty);
 				 EditText editText2 = (EditText)rootView.findViewById(R.id.editText2);
 				 EditText editText3 = (EditText)rootView.findViewById(R.id.editText3);
 				 EditText editText4 = (EditText)rootView.findViewById(R.id.editText4);

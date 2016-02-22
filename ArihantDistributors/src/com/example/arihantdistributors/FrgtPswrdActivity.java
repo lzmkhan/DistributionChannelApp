@@ -1,11 +1,13 @@
 package com.example.arihantdistributors;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,7 +30,8 @@ public class FrgtPswrdActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.frgtpswrdcntinr);
 		
-		
+		ActionBar ab = getActionBar();
+		ab.hide();
 		 FragmentManager fragmentManager = getFragmentManager();
 	      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 	      Forgetfragment fragment = new Forgetfragment();
@@ -85,8 +88,9 @@ public class FrgtPswrdActivity extends Activity {
 						false);
 			 
 			 EditText field2 = (EditText)rootView.findViewById(R.id.editText2);
-			  field1 = (EditText)rootView.findViewById(R.id.editText1);
-			
+			  field1 = (EditText)rootView.findViewById(R.id.edtgetQnty);
+			  field1.getBackground().mutate().setColorFilter(getResources().getColor(R.color.primary_light), PorterDuff.Mode.SRC_ATOP);
+			  field2.getBackground().mutate().setColorFilter(getResources().getColor(R.color.primary_light), PorterDuff.Mode.SRC_ATOP);
 			 field2.addTextChangedListener(new TextWatcher() {
 
 				   @Override
@@ -142,6 +146,7 @@ public class FrgtPswrdActivity extends Activity {
 								
 								//reset functionality will come here.
 						    EditText ed1 = (EditText) rootView.findViewById(R.id.txtOTP);
+						    ed1.getBackground().mutate().setColorFilter(getResources().getColor(R.color.primary_light), PorterDuff.Mode.SRC_ATOP);
 							String enteredOTP = ed1.getText().toString();
 							// The generated OTP is sent to Email. It is also Stored in OTP_Holder global in OTP_Handler class.
 							String generatedOTP = "xxx";// need to assign it.

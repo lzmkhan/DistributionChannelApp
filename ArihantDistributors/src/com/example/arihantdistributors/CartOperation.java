@@ -5,7 +5,8 @@ import java.util.List;
 
 public class CartOperation {
 	
-	private static List<Item> cartStack = new ArrayList<Item>();
+	public 
+	List<Item> cartStack = new ArrayList<Item>();
 
 
 public void addToCart(Item i)
@@ -17,11 +18,11 @@ public void addToCart(Item i)
 public void removeFromCart(Item i)
 {
 	int index =0;
-	int itemID = i.getItemID();
+	String itemID = i.getItemID();
 	
 	for(int j =0; j < cartStack.size();j++)
 	{
-		if(itemID == cartStack.get(j).getItemID())
+		if(itemID.equals(cartStack.get(j).getItemID()))
 		{
 			index =j;
 		}
@@ -29,7 +30,23 @@ public void removeFromCart(Item i)
 	cartStack.remove(index);
 }
 
-
+public int getTotal()
+{
+	int sum=0;
+	for(int i =0;  i< cartStack.size();i++)
+	{
+		int price = Integer.parseInt(cartStack.get(i).getItemPrice());
+		int qnty = cartStack.get(i).getItemQnty();
+		sum = sum + (price *qnty);
+		
+	}
+	
+	
+	
+	
+	return sum;
+	
+}
 
 public List<Item> copyCartContents()
 {	
@@ -45,11 +62,11 @@ public void setCart(List<Item> i)
 public int chkifalrdyextsinlst(Item i)
 {
 	
-	int itemId = i.getItemID();
+	String itemId = i.getItemID();
 	
 	for(int j =0 ; j < cartStack.size(); j++)
 	{
-		if(itemId == cartStack.get(j).getItemID())
+		if(itemId.equals(cartStack.get(j).getItemID()))
 		{
 			return j;
 		}
@@ -61,7 +78,7 @@ public int chkifalrdyextsinlst(Item i)
 public void updateCartItem(int index, int qnty)
 {
 	Item i = cartStack.get(index);
-	i = new Item(i.getItemID(), i.getItemName(), i.getItemPrice(), i.getItemImageURL(),i.getItemDesc(), i.getItemQnty());
+	i = new Item(i.getItemID(), i.getItemName(), i.getItemPrice(), i.getItemImageURL(),i.getItemDesc(), qnty);
     cartStack.set(index, i);
 }
 

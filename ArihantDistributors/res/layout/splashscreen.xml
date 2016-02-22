@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F0F0F0"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/brandCatTitle"
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="your logo will be here!" />
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:scaleType="matrix"
+        android:src="@drawable/ah1" />
 
 </LinearLayout>

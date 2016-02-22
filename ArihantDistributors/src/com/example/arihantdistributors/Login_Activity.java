@@ -1,5 +1,6 @@
 package com.example.arihantdistributors;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +17,8 @@ public class Login_Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_screen);
 		
-		
+		ActionBar ab = getActionBar();
+		ab.hide();
 		 Button login = (Button) findViewById(R.id.login_btn);
 			login.setOnClickListener(new OnClickListener(){
 					@Override

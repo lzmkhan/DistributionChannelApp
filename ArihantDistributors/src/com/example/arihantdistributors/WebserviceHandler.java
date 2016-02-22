@@ -1,17 +1,573 @@
 package com.example.arihantdistributors;
 
-import org.ksoap2.serialization.SoapObject;
+import java.io.IOException;
+import java.util.List;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
-public class WebserviceHandler {
+public class WebserviceHandler extends AsyncTask<Object, Object, Object>{
+
+	private String SOAP_URL ="";
+	private String SOAP_NAMESPACE ="urn:getmsWSDL";
+	private String SOAP_METHOD_NAME ="db1";
+	private  String SOAP_ACTION ="http://autestdomain.comule.com/Arihantwebservices/db1";
+	private SoapObject request;
+	private ProgressDialog pgd;
+	private Context c;
+	int mode;
+	int submode;
+	private String accountID ="";
+	public String query1 ="";
+	public String query2 ="";
+	public String OTP ="";
+	public String newPass ="";
+	private String xml ="";
+	public String query ="";
+	private String message ="";
+	private String orderNumber;
+	private String Webhostaddress ="http://autestdomain.comule.com/Arihantwebservices";
 
 	
-	private String SOAP_NAMESPACE ="";
-	private String SOAP_METHOD_NAME ="";
-	SoapObject request;
-	ProgressDialog pg;
-	Context c;
+	public WebserviceHandler(int mode)
+	{	
+		// 0 for sendNewPassword()
+		// 1 for signupFormSend()
+		// 2 for searchQuery()
+		// 3 for nonQuery()
+		// 4 for Chat()
+		// 5 for insertOrder()
+		// 6 for sendOTPToSMS()
+		
+		this.mode=mode;
+		Log.d("tag", "" + this.mode);
+	}
+
+
+	public void set_context(Context c)
+	{
+		this.c =c;
+	}
+
+	public boolean isOnline(Context context) {
+		  ConnectivityManager connectivityManager  = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+		  NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		  return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+
+	@Override
+	protected Object doInBackground(Object... arg0) {
+		
+		if(isOnline(c))
+		{
+		switch(mode)
+		{
+		case 0://sendNewPassword
+			sendNewPassword();
+			 
+			break;
+			
+		case 1://signupFormSend
+			signupFormSend();
+			
+			break;
+			
+		case 2://searchQuery
+			searchQuery();
+			
+			
+			
+			break;
+			
+		case 3://nonQuery
+			nonQuery();
+		
+			
+			break;
+			
+		case 4://Chat
+			chat();
+		 break;
+		 
+		case 5://insertOrder
+			insertOrders();
+		 break;
+		 
+		case 6://sendOTPToSMS
+			sendOTPToSMS();
+		 break;
+		
+		}
+		return 1;
+		}
+		else
+		{
+			
+		}
+		
+		
+		    
+		return 0;
+	}
+	
+	
+	protected void onPreExecute(){ 
+		   super.onPreExecute();
+		        pgd = new ProgressDialog(c);
+		        pgd.setMessage("Connecting to webservice...");
+		        pgd.show();    
+		}
+	
+	
+	protected void onPostExecute(Object result) {
+		 // TODO Auto-generated method stub
+		 super.onPostExecute(result);
+		if(result.equals(1))
+		{
+		 switch(mode)
+		 {
+		 case 0:
+			 pgd.dismiss();
+				
+		 break;
+		 
+		 case 1:
+			 pgd.dismiss();
+		 break;
+		 
+		 
+		 case 2:
+			 pgd.dismiss();
+			 List<String> list1 = null;
+				XMLHandler xml = new XMLHandler();
+				
+				try {
+				 list1 = xml.parseXML(TempData.getInstance().brandTemp );
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				sUtility su = new sUtility();
+			if(submode ==0){
+				((MainActivity)c).populateBrandList(su.fillListSource(list1,submode));
+			((MainActivity)c).brandAdapter.notifyDataSetChanged();	
+			}
+			else if(submode ==1){
+				((MainActivity)c).populateCategoryList(su.fillListSource(list1, submode));
+			    ((MainActivity)c).categoryAdapter.notifyDataSetChanged();}
+			else if(submode ==2){
+			
+			((MainActivity)c).populateItemList(su.fillItemList(list1));
+			 ((MainActivity)c).itemAdapter.notifyDataSetChanged();
+			}
+			break;
+				
+			 
+		 case 3:
+				pgd.dismiss();
+				
+			 break;
+			 
+			 
+		 case 4:
+			 pgd.dismiss();
+			// Toast.makeText(c, "Registered with Server",
+					 //  Toast.LENGTH_LONG).show();
+			 
+			 break;
+		 case 5:
+			 pgd.dismiss();
+			 if(orderNumber==null)
+			 {
+				 Toast.makeText(c, "Failed",
+						   Toast.LENGTH_LONG).show();
+					TempData.getInstance().im.setVisibility(View.INVISIBLE);
+					TempData.getInstance().ed1.setText("There seems to be problem submitting the order.\nPlease try again.");
+			 }
+			 else
+			 {
+			 AlertDialog.Builder as= new AlertDialog.Builder(c);
+			    as.setTitle("Order Number");
+			    
+			    
+			    as.setMessage("Order placed Successfully!");
+			    
+			    as.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // continue with delete
+			       	     /*
+						  * clear the contents of cartStack in tempdata
+						  * 
+						  */
+			        	
+			        	TempData.getInstance().ed1.setText("Your Order has been successfully placed.\nYour order number is " + orderNumber);
+					
+			        	TempData.getInstance().cart.cartStack.clear();
+			        }
+			     });
+			    
+			    as.setIcon(android.R.drawable.ic_popup_reminder);
+			     as.show();
+			 }
+			 
+			 break;
+		 case 6:
+			 pgd.dismiss();
+		
+			 
+			 break;
+			 
+		 }
+		}else
+			{
+			pgd.dismiss();
+			
+				
+			}
+
+		}	
+	
+	
+	
+	
+	
+	public void sendNewPassword()
+	{
+		SOAP_URL= Webhostaddress + "/resetpass.php";
+		
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(accountID);
+		request.addProperty(pi1);
+
+		PropertyInfo pi2= new PropertyInfo();
+		pi2.setName("b");
+		pi2.setValue(newPass);
+		request.addProperty(pi2);
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			String result = response.toString();
+			Log.d("webservice reply",response.toString());
+			if(result.contains("true"))
+			  Toast.makeText(c, "Password changed successfully!", Toast.LENGTH_SHORT).show();
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			 Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
+	//the input of this function will be contents of info_store in xml format
+	public void signupFormSend()
+	{
+		SOAP_URL= Webhostaddress+ "/signup.php";
+		
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(xml);
+		request.addProperty(pi1);
+
+		
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			String result = response.toString();
+			Log.d("webservice reply",response.toString());
+			if(result.contains("true"))
+			  Toast.makeText(c, "Account Created successfully!", Toast.LENGTH_SHORT).show();
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			 Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
+	public void searchQuery()
+	{
+		SOAP_URL= Webhostaddress + "/Query1.php";
+		
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(query);
+		request.addProperty(pi1);
+
+		
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		String error =" ";
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			
+			TempData.getInstance().brandTemp = new String(response.toString());
+			Log.d("webservice reply",response.toString());
+			if(TempData.getInstance().brandTemp .contains("False"))
+			  Toast.makeText(c, "No Product Found!", Toast.LENGTH_SHORT).show();
+			
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			error = new String(e.toString());
+			
+		}
+		if(!error.equals(" "))
+		{
+			Log.d("toast", "searchquery");
+			 //Toast.makeText(, "Something went wrong! Error : " + error, Toast.LENGTH_SHORT).show();
+		}
+
+	}
+	
+	public void nonQuery()
+	{
+		SOAP_URL= Webhostaddress + "/query.php";
+		
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME); 
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(query);
+		request.addProperty(pi1);
+
+		
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			String result = response.toString();
+			Log.d("webservice reply",response.toString());
+		
+			  Toast.makeText(c, "Success!", Toast.LENGTH_SHORT).show();
+			
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			 Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
+	
+	public void chat()
+	{
+		SOAP_URL= Webhostaddress + "/chat.php";
+		
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(message);
+		request.addProperty(pi1);
+
+		
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			String result = response.toString();
+			Log.d("webservice reply",response.toString());
+		
+			  Toast.makeText(c, "Sent!", Toast.LENGTH_SHORT).show();
+			
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			 Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
+	
+	
+	
+	public void insertOrders()
+	{
+		SOAP_URL= Webhostaddress + "/Commit_orders.php";
+		Log.d("sopa url",SOAP_URL);
+		
+
+		request = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("rollno1");
+		pi1.setValue(query1);
+		request.addProperty(pi1);
+		
+		PropertyInfo pi2= new PropertyInfo();
+		pi2.setName("rollno2");
+		pi2.setValue(query2);
+		pi2.setType("String");
+		request.addProperty(pi2);
+
+
+
+		Log.d("request",request.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+	
+		try
+		{
+			androidHttpTransport.debug = true;
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			
+			String s =androidHttpTransport.responseDump;
+			Log.d("responsedump", s);
+			Object response =  (Object)envp.getResponse();
+			orderNumber = response.toString();
+			TempData.getInstance().tempOrder= orderNumber;
+			Log.d("webservice reply",response.toString());
+		
+			  //Toast.makeText(c, "Order placed successfully! order number is " + orderNumber, Toast.LENGTH_SHORT).show();
+			
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+
+			// Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
+	
+	public void sendOTPToSMS()
+	{
+		SOAP_URL= Webhostaddress + "/Send_mail.php";
+		
+		SoapObject request1;
+
+		request1 = new SoapObject(SOAP_NAMESPACE,SOAP_METHOD_NAME);
+
+		PropertyInfo pi1= new PropertyInfo();
+		pi1.setName("a");
+		pi1.setValue(accountID);
+		request1.addProperty(pi1);
+		
+		PropertyInfo pi2= new PropertyInfo();
+		pi2.setName("a");
+		pi2.setValue(OTP);
+		request1.addProperty(pi2);
+
+		
+
+
+		Log.d("request",request1.toString());
+
+		SoapSerializationEnvelope envp = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		envp.dotNet=false;
+		envp.setOutputSoapObject(request1);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(SOAP_URL);
+		try
+		{
+			androidHttpTransport.call(SOAP_ACTION,envp);
+			Object response=  (Object)envp.getResponse();
+			String result = response.toString();
+			Log.d("webservice reply",response.toString());
+		
+			  Toast.makeText(c, "OTP Sent!", Toast.LENGTH_SHORT).show();
+			
+		}
+		catch(Exception e)
+		{
+			Log.d("ws error",e.toString());
+			 Toast.makeText(c, "Something went wrong! Error : " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+
+	}
+	
 	
 }
