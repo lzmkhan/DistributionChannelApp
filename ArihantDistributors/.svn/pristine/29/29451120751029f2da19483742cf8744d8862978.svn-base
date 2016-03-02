@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:padding="8dp" >
+
+    <ImageView
+        android:id="@+id/cartItemImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:src="@drawable/foodicon" />
+
+    <TextView
+        android:id="@+id/cartItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/cartItemImage"
+        android:layout_toRightOf="@+id/cartItemImage"
+        android:text="Item Title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/cartINR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cartEdit"
+        android:layout_alignLeft="@+id/cartPrice"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_toLeftOf="@+id/cartEdit"
+        android:layout_toStartOf="@+id/cartEdit"
+        android:text="INR"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+     <TextView
+         android:id="@+id/cartQnty"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/cartRemove"
+         android:layout_alignRight="@+id/cartINR"
+         android:layout_below="@+id/cartINR"
+         
+         android:layout_marginTop="10dp"
+         android:layout_toLeftOf="@+id/cartRemove"
+         android:layout_toStartOf="@+id/cartRemove"
+         android:text="X 80"
+         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+     <ImageView
+         android:id="@+id/cartEdit"
+         android:layout_width="25dp"
+         android:layout_height="25dp"
+         android:layout_alignParentRight="true"
+         android:layout_marginRight="5dp"
+         android:layout_marginTop="10dp"
+         android:src="@drawable/ic_edit" />
+
+      <ImageView
+          android:id="@+id/cartRemove"
+          android:layout_width="25dp"
+          android:layout_height="25dp"
+          android:layout_alignParentRight="true"
+          android:layout_below="@+id/cartEdit"
+          android:layout_marginRight="5dp"
+          android:layout_marginTop="10dp"
+          android:src="@drawable/ic_remove" />
+   
+</RelativeLayout>

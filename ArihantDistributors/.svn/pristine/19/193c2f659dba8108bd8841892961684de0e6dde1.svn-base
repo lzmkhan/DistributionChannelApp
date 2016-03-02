@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+         android:id="@+id/scrollView1"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
+         
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/streetText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:gravity="center_vertical|center_horizontal"
+        android:hint="door no, appartment name ..." >
+
+        <requestFocus />
+    </EditText>
+
+     <EditText
+         android:id="@+id/streetText2"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         
+        android:gravity="center_vertical|center_horizontal"
+         android:layout_margin="10dp"
+         android:ems="10"
+         android:hint="street name" >
+
+    </EditText>
+
+      <EditText
+          android:id="@+id/areaText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="10dp"
+          
+        android:gravity="center_vertical|center_horizontal"
+          android:ems="10"
+          android:hint="area" >
+
+    </EditText>
+
+     <EditText
+         android:id="@+id/cityText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+         android:ems="10"
+        android:gravity="center_vertical|center_horizontal"
+         android:hint="city" >
+
+    </EditText>
+
+     <EditText
+         android:id="@+id/stateText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+        android:gravity="center_vertical|center_horizontal"
+         android:ems="10"
+         android:hint="state" >
+
+    </EditText>
+
+     <EditText
+         android:id="@+id/districtText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+        android:gravity="center_vertical|center_horizontal"
+         android:ems="10"
+         android:hint="district" >
+
+    </EditText>
+
+     <EditText
+         android:id="@+id/pinText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+        android:gravity="center_vertical|center_horizontal"
+         android:ems="10"
+         android:hint="PINCODE"
+         android:inputType="number" >
+        
+    </EditText>
+
+     <EditText
+         android:id="@+id/phoneText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="10dp"
+         android:ems="10"
+        android:gravity="center_vertical|center_horizontal"
+         android:hint="phone number"
+         android:inputType="phone" >
+        
+    </EditText>
+
+ <Button
+     android:id="@+id/btnUpdate"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:layout_margin="10dp"
+     android:background="@drawable/buttonshape"
+     android:text="@string/update"
+     android:textColor="#FFFFFF" />
+
+</LinearLayout>
+
+
+
+    </ScrollView>

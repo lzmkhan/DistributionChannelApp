@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="#F0F0F0"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/brandCatTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/fogot_1_text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+     
+    
+    <EditText
+        android:id="@+id/txtOTP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:ems="10"
+        android:gravity="center_vertical|center_horizontal"
+        android:hint="@string/OTP"
+        android:textColor="#989898" >
+
+    </EditText>
+
+    <Button
+        android:id="@+id/btnPassReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:text="@string/Reset"
+                 android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+ 
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnResend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:text="@string/Resend"
+                 android:background="@drawable/buttonshape"
+        android:shadowColor="#B5B5B5"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+ 
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>
